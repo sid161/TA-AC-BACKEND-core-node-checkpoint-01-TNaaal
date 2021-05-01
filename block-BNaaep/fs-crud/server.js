@@ -1,6 +1,6 @@
 var http = require('http');
 var fs = require('fs');
-// var contactPath = __dirname + 
+ var contactPath = __dirname + '/'
 
 var server = http.createServer(handleRequest)
 
@@ -14,7 +14,12 @@ function handleRequest(req,res){
            var username =  JSON.parse(store).username;
            fs.open(contactPath + username + '.json', 'wx', (err,fd) => {
                if(err) return console.log(err);
-               console.log(fd)
+               fs.writeFile(fd, store, (err) => {
+                   if(err) return console.log(err);
+                   fs.close(fd, () => {
+                       res.end(`${username} created sucesfully`);
+                   })
+               })
            })
         }
       
